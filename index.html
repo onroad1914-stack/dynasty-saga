@@ -23,7 +23,7 @@
 #portraitDialog #portraitContents{display:block;position:relative}
 #portraitDialog .hero-art{height:clamp(390px,58dvh,570px);min-height:0;max-height:none;display:flex;justify-content:center;align-items:flex-end;overflow:hidden;background:radial-gradient(ellipse at 50% 35%,#405272,#111b2c 78%)}
 #portraitDialog .hero-art img{display:block;width:100%;height:100%;max-width:none;object-fit:contain;object-position:center top}
-#portraitDialog .detail-body{position:relative;z-index:2;margin:-108px 12px 14px;padding:17px 16px 18px;border:1px solid #a78b61;border-radius:12px;background:linear-gradient(180deg,rgba(9,22,40,.87),rgba(13,29,51,.97) 42%,rgba(13,29,51,.99));box-shadow:0 14px 30px rgba(0,0,0,.35);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);color:#f0e7db}
+#portraitDialog .detail-body{position:relative;z-index:2;margin:-108px 12px 14px;padding:17px 16px 18px;border:1px solid #a78b61;border-radius:12px;background:linear-gradient(180deg,rgba(9,22,40,.42),rgba(13,29,51,.49) 42%,rgba(13,29,51,.56));box-shadow:0 14px 30px rgba(0,0,0,.25);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);color:#f0e7db}
 #portraitDialog .detail-body h2{margin:0 0 8px;color:#f2d8a2;text-shadow:0 2px 4px #0009}
 #portraitDialog .detail-body p{margin:9px 0;line-height:1.65;color:#e1e9f2;text-shadow:0 1px 2px #000a}
 #portraitDialog .detail-body .line{color:#ead2a2}
@@ -39,32 +39,53 @@
 <section id="people" class="hidden"><div class="box"><h2>家臣団 <span class="chip">自動生成・自律行動</span></h2><p class="sub">アルト・リュカ・ミラは専用の人物像を維持。新しい家臣は外見・性格・来歴・志を自動生成し、季節ごとに自ら行動します。</p><div id="members" class="rows"></div><button class="full" onclick="recruit()">家臣を登用する（30G）</button></div><div class="box"><h2>🏛️ 家臣評議会</h2><p class="sub">役職の任命は無料。同じ家臣は複数の役職を兼任できません。季節ごとに担当の成果が発生します。</p><div id="council"></div><div id="councilStatus" class="event-note"></div></div><div class="box"><h2>武芸と陣形</h2><select id="formation" onchange="setFormation(this.value)"><option value="balance">均衡陣（標準）</option><option value="charge">鋒矢陣（攻撃＋25%・被害＋20%）</option><option value="shield">方円陣（被害－30%・攻撃－15%）</option></select><div class="grid"><button onclick="train()">全員鍛錬 20G</button><button class="alt" onclick="rest()">全員休息 10G</button></div></div></section>
 <section id="world" class="hidden"><div class="box"><h2>領土と周辺勢力</h2><div class="map" id="map"></div><p class="sub">周辺勢力は時間と共に強くなります。交渉で対立を避けることも、戦って領土を奪うこともできます。</p></div><div class="box"><h2>外交行動</h2><select id="faction"></select><div class="grid"><button onclick="diplomacy('gift')">贈答 35G</button><button class="alt" onclick="diplomacy('talk')">使節派遣 15G</button><button class="gold" onclick="diplomacy('pact')">不可侵協定</button><button class="danger" onclick="declareWar()">出兵する</button></div><div id="diplomacyStatus" class="sub" style="margin-top:10px"></div></div><div class="box"><h2>騎士団の伝承</h2><p class="story">かつて天の城セレスティアが栄え、アゼルの赤竜騎士団とマリウスの暗黒騎士団が歴史に名を刻んだ。だが今、その伝承を知る者は少ない。</p><p class="sub">※『紅月譚Ω』に由来する固有名詞を使用。小国・周辺勢力・事件は本ゲーム用の創作設定です。</p></div></section>
 <section id="dynasty" class="hidden"><div class="box"><h2>当主と一族</h2><div id="family" class="rows"></div><div class="grid" style="margin-top:10px"><button onclick="marry()">縁談を結ぶ 80G</button><button onclick="haveChild()">子を授かる 60G</button><button class="alt" onclick="chooseHeir()">後継者を指名</button><button class="gold" onclick="nextSeason()">季節を進める</button></div><p class="sub">当主55歳で継承。16歳以上の子が後継者になれます。直系の継承者がいない場合は遠縁の人物が家を継ぎます。</p></div><div class="box"><h2>紅月の血脈</h2><p class="story">家は続いても、同じ人間は二度と生まれない。誰と出会い、何を守り、何を遺したか——それが次の世代の国を変える。</p><div id="generation" class="sub"></div></div></section>
-<section id="chronicle" class="hidden"><div class="box"><h2>歴史の記録</h2><div id="logs" class="log"></div></div><div class="box"><h2>保存と設定</h2><p class="sub">自動保存。以前のv0.2データがあれば、人物と金貨・名声・年を移行します。端末内のSafariデータを削除するとセーブが消えることがあります。</p><button class="alt full" onclick="exportSave()">セーブデータを書き出す</button><button class="danger full" onclick="resetGame()">最初から始める</button></div></section><footer>群雄の年代記 v1.1 — 半透明肖像パネル | iPhone Safari 対応</footer></div>
+<section id="chronicle" class="hidden"><div class="box"><h2>歴史の記録</h2><div id="logs" class="log"></div></div><div class="box"><h2>保存と設定</h2><p class="sub">自動保存。以前のv0.2データがあれば、人物と金貨・名声・年を移行します。端末内のSafariデータを削除するとセーブが消えることがあります。</p><button class="alt full" onclick="exportSave()">セーブデータを書き出す</button><button class="danger full" onclick="resetGame()">最初から始める</button></div></section><footer>群雄の年代記 v1.2 — 肖像・性別設定 | iPhone Safari 対応</footer></div>
 <dialog id="portraitDialog"><button class="close-detail" onclick="closePortrait()">✕ 閉じる</button><div id="portraitContents"></div></dialog><dialog id="dialog"><h2 id="dialogTitle"></h2><p id="dialogText"></p><div id="dialogActions" class="grid"></div></dialog>
 <script>
 'use strict';const $=id=>document.getElementById(id),KEY='dynastySagaV3',OLD='dynastySagaV1',SEASONS=['春','夏','秋','冬'];const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a,pick=a=>a[rnd(0,a.length-1)],uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const PORTRAITS=[{"id": "m001", "label": "男性 001", "path": "assets/portraits/m001.webp"}, {"id": "m002", "label": "男性 002", "path": "assets/portraits/m002.webp"}, {"id": "m003", "label": "男性 003", "path": "assets/portraits/m003.webp"}, {"id": "m004", "label": "男性 004", "path": "assets/portraits/m004.webp"}, {"id": "m005", "label": "男性 005", "path": "assets/portraits/m005.webp"}, {"id": "f001", "label": "女性 001", "path": "assets/portraits/f001.webp"}, {"id": "f002", "label": "女性 002", "path": "assets/portraits/f002.webp"}, {"id": "f003", "label": "女性 003", "path": "assets/portraits/f003.webp"}, {"id": "f004", "label": "女性 004", "path": "assets/portraits/f004.webp"}, {"id": "f005", "label": "女性 005", "path": "assets/portraits/f005.webp"}];
 
+const FEMALE_NAME_HINTS=['エルナ','セナ','ナギ','アイラ','フィオナ','セリナ','アリシア','ルシア','レティシア','イリス','クララ','ロゼ','ルーナ','レオナ','ミラ'];
+const MALE_NAME_HINTS=['シオン','カイ','レオン','ユウ','アッシュ','ノエル','エリオ','カイル','ユリウス','エヴァン','ノア','フィン','クロード','リュカ','アルト'];
+function inferGender(h){
+ if(h.gender==='f'||h.gender==='m')return h.gender;
+ const n=String(h.n||'').split('・').pop();
+ if(FEMALE_NAME_HINTS.includes(n))return 'f';
+ if(MALE_NAME_HINTS.includes(n))return 'm';
+ if(/^f\d{3}$/.test(h.portraitId||''))return 'f';
+ if(/^m\d{3}$/.test(h.portraitId||''))return 'm';
+ let nsum=Array.from(String(h.id||h.n)).reduce((v,c)=>v+c.charCodeAt(0),0);
+ return nsum%2?'f':'m';
+}
 function portraitPath(h){
- if(!h.generated)return null;
- if(h.portraitId==='svg')return null;
- const id=h.portraitId||PORTRAITS[(Array.from(String(h.id||h.n)).reduce((v,c)=>v+c.charCodeAt(0),0))%PORTRAITS.length].id;
+ if(!h.generated||h.portraitId==='svg')return null;
+ const matches=PORTRAITS.filter(p=>p.id[0]===inferGender(h));
+ const id=h.portraitId||matches[Array.from(String(h.id||h.n)).reduce((v,c)=>v+c.charCodeAt(0),0)%matches.length]?.id;
  return PORTRAITS.find(p=>p.id===id)?.path||null;
 }
 function portraitImage(h){
  const path=portraitPath(h);
  return path?`<img loading="lazy" src="${path}" alt="${esc(h.n)}の肖像" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span style="display:none">${avatar(h)}</span>`:avatar(h);
 }
+function switchGender(id,value){
+ const h=findPerson(id);if(!h||!h.generated||!['f','m'].includes(value))return;
+ h.gender=value;
+ if(h.portraitId!=='svg'&&h.portraitId&&h.portraitId[0]!==value)h.portraitId=null;
+ save();closePortrait();openPortrait(id);
+}
 function switchPortrait(id,value){
  const h=findPerson(id);if(!h||!h.generated)return;
- if(value!=='svg'&&!PORTRAITS.some(p=>p.id===value))return;
+ if(value!=='svg'&&!PORTRAITS.some(p=>p.id===value&&p.id[0]===inferGender(h)))return;
  h.portraitId=value;save();closePortrait();openPortrait(id);
 }
 function portraitChooser(h){
  if(!h.generated)return '';
- return '<div class="portrait-picker"><label for="portraitSelect">肖像を切り替える（自動保存）</label><select id="portraitSelect" onchange="switchPortrait(\''+esc(h.id)+'\',this.value)">'+
- '<option value="svg"'+(h.portraitId==='svg'?' selected':'')+'>旧式アバター</option>'+
- PORTRAITS.map(p=>'<option value="'+p.id+'"'+((h.portraitId||portraitPath(h)?.split('/').pop().replace('.webp',''))===p.id?' selected':'')+'>'+p.label+'</option>').join('')+'</select></div>';
+ const gender=inferGender(h),current=h.portraitId||portraitPath(h)?.split('/').pop().replace('.webp','');
+ return '<div class="portrait-picker"><label for="genderSelect">家臣の性別</label><select id="genderSelect" onchange="switchGender(\''+esc(h.id)+'\',this.value)">'+
+ '<option value="f"'+(gender==='f'?' selected':'')+'>女性</option><option value="m"'+(gender==='m'?' selected':'')+'>男性</option></select>'+
+ '<label for="portraitSelect" style="margin-top:12px">肖像を切り替える（自動保存）</label><select id="portraitSelect" onchange="switchPortrait(\''+esc(h.id)+'\',this.value)">'+
+ '<option value="svg"'+(current==='svg'?' selected':'')+'>旧式アバター</option>'+
+ PORTRAITS.filter(p=>p.id[0]===gender).map(p=>'<option value="'+p.id+'"'+(current===p.id?' selected':'')+'>'+p.label+'</option>').join('')+'</select></div>';
 }
 
 const cast={アルト:{icon:'⚔️',image:'assets/alto.webp',personality:'誠実',line:'この小さな国を、いつか誰もが誇れる場所にする。'},リュカ:{icon:'🛡️',image:'assets/ryuka.webp',personality:'快活',line:'あんたが進むなら、俺は背中を守るぜ。'},ミラ:{icon:'✨',image:'assets/mira.webp',personality:'温和',line:'争いのない明日を、いっしょに探しましょう。'}};
@@ -76,7 +97,7 @@ const surnames=['エーベル','ヴァイス','アスフォード','フェルン
 const hometowns=['灰銀の村','北嶺の砦','古都エレシア','白霧の谷','風渡りの丘','南境の宿場','蒼樹の森'];
 const wishes=['領民の暮らしを守る','失われた家名を再興する','未知の土地を巡る','優れた騎士になる','紅月の伝承を解き明かす','家族を幸せにする'];
 const traitsList=['勇敢','慎重','知略','温厚','野心家','誠実','自由奔放','寡黙','面倒見が良い'];
-function newRetainer(){let h=hero(pick(surnames)+'・'+pick(firstNames),rnd(18,34));h.generated=true;h.traits=[pick(traitsList)];h.origin=pick(hometowns);h.ambition=pick(wishes);h.loyalty=rnd(40,85);h.look={hair:rnd(0,7),eyes:rnd(0,5),skin:rnd(0,3),cloth:rnd(0,7),hairStyle:rnd(0,3),seed:rnd(0,9999)};h.job=pick(['剣士','弓兵','術士','騎士','癒し手']);h.atk+=rnd(0,5);h.bond=rnd(5,20);return h}
+function newRetainer(){let h=hero(pick(surnames)+'・'+pick(firstNames),rnd(18,34));h.generated=true;h.gender=inferGender(h);h.traits=[pick(traitsList)];h.origin=pick(hometowns);h.ambition=pick(wishes);h.loyalty=rnd(40,85);h.look={hair:rnd(0,7),eyes:rnd(0,5),skin:rnd(0,3),cloth:rnd(0,7),hairStyle:rnd(0,3),seed:rnd(0,9999)};h.job=pick(['剣士','弓兵','術士','騎士','癒し手']);h.atk+=rnd(0,5);h.bond=rnd(5,20);return h}
 function avatar(h){
  const a=h.look||{hair:0,eyes:0,skin:0,cloth:0,hairStyle:0,seed:0};
  const hair=['#26212b','#9a714b','#d4c28a','#657585','#783d4c','#c9cbd2','#41312a','#a46b45'][a.hair%8],coat=['#7d424e','#37577d','#306d69','#8a7445','#55447c','#795c4b','#407d88','#67435b'][a.cloth%8],skin=['#f3cab0','#e6b58f','#b88567','#f0d9c8'][a.skin%4],eye=['#5aa6a0','#b18b48','#5278b6','#98627c','#60875b','#956654'][a.eyes%6];
