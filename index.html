@@ -39,7 +39,7 @@
 <section id="people" class="hidden"><div class="box"><h2>家臣団 <span class="chip">自動生成・自律行動</span></h2><p class="sub">アルト・リュカ・ミラは専用の人物像を維持。新しい家臣は外見・性格・来歴・志を自動生成し、季節ごとに自ら行動します。</p><div id="members" class="rows"></div><button class="full" onclick="recruit()">家臣を登用する（30G）</button></div><div class="box"><h2>🏛️ 家臣評議会</h2><p class="sub">役職の任命は無料。同じ家臣は複数の役職を兼任できません。季節ごとに担当の成果が発生します。</p><div id="council"></div><div id="councilStatus" class="event-note"></div></div><div class="box"><h2>武芸と陣形</h2><select id="formation" onchange="setFormation(this.value)"><option value="balance">均衡陣（標準）</option><option value="charge">鋒矢陣（攻撃＋25%・被害＋20%）</option><option value="shield">方円陣（被害－30%・攻撃－15%）</option></select><div class="grid"><button onclick="train()">全員鍛錬 20G</button><button class="alt" onclick="rest()">全員休息 10G</button></div></div></section>
 <section id="world" class="hidden"><div class="box"><h2>領土と周辺勢力</h2><div class="map" id="map"></div><p class="sub">周辺勢力は時間と共に強くなります。交渉で対立を避けることも、戦って領土を奪うこともできます。</p></div><div class="box"><h2>外交行動</h2><select id="faction"></select><div class="grid"><button onclick="diplomacy('gift')">贈答 35G</button><button class="alt" onclick="diplomacy('talk')">使節派遣 15G</button><button class="gold" onclick="diplomacy('pact')">不可侵協定</button><button class="danger" onclick="declareWar()">出兵する</button></div><div id="diplomacyStatus" class="sub" style="margin-top:10px"></div></div><div class="box"><h2>騎士団の伝承</h2><p class="story">かつて天の城セレスティアが栄え、アゼルの赤竜騎士団とマリウスの暗黒騎士団が歴史に名を刻んだ。だが今、その伝承を知る者は少ない。</p><p class="sub">※『紅月譚Ω』に由来する固有名詞を使用。小国・周辺勢力・事件は本ゲーム用の創作設定です。</p></div></section>
 <section id="dynasty" class="hidden"><div class="box"><h2>当主と一族</h2><div id="family" class="rows"></div><div class="grid" style="margin-top:10px"><button onclick="marry()">縁談を結ぶ 80G</button><button onclick="haveChild()">子を授かる 60G</button><button class="alt" onclick="chooseHeir()">後継者を指名</button><button class="gold" onclick="nextSeason()">季節を進める</button></div><p class="sub">当主55歳で継承。16歳以上の子が後継者になれます。直系の継承者がいない場合は遠縁の人物が家を継ぎます。</p></div><div class="box"><h2>紅月の血脈</h2><p class="story">家は続いても、同じ人間は二度と生まれない。誰と出会い、何を守り、何を遺したか——それが次の世代の国を変える。</p><div id="generation" class="sub"></div></div></section>
-<section id="chronicle" class="hidden"><div class="box"><h2>歴史の記録</h2><div id="logs" class="log"></div></div><div class="box"><h2>保存と設定</h2><p class="sub">自動保存。以前のv0.2データがあれば、人物と金貨・名声・年を移行します。端末内のSafariデータを削除するとセーブが消えることがあります。</p><button class="alt full" onclick="exportSave()">セーブデータを書き出す</button><button class="danger full" onclick="resetGame()">最初から始める</button></div></section><footer>群雄の年代記 v1.5 — クラスとスキル | iPhone Safari 対応</footer></div>
+<section id="chronicle" class="hidden"><div class="box"><h2>歴史の記録</h2><div id="logs" class="log"></div></div><div class="box"><h2>保存と設定</h2><p class="sub">自動保存。以前のv0.2データがあれば、人物と金貨・名声・年を移行します。端末内のSafariデータを削除するとセーブが消えることがあります。</p><button class="alt full" onclick="exportSave()">セーブデータを書き出す</button><button class="danger full" onclick="resetGame()">最初から始める</button></div></section><footer>群雄の年代記 v1.5.1 — 戦闘修正版 | iPhone Safari 対応</footer></div>
 <dialog id="portraitDialog"><button class="close-detail" onclick="closePortrait()">✕ 閉じる</button><div id="portraitContents"></div></dialog><dialog id="dialog"><h2 id="dialogTitle"></h2><p id="dialogText"></p><div id="dialogActions" class="grid"></div></dialog>
 <script>
 'use strict';const $=id=>document.getElementById(id),KEY='dynastySagaV3',OLD='dynastySagaV1',SEASONS=['春','夏','秋','冬'];const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a,pick=a=>a[rnd(0,a.length-1)],uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -242,7 +242,7 @@ function ctbStep(action,id){
  if(action==='attack'){let d=Math.max(1,h.atk+rnd(-2,5));b.hp=Math.max(0,b.hp-d);info=`${h.n}の攻撃！ ${d}ダメージ`;delay=20}
  else if(action==='skill'){if(S.gold<8){notice='連携技には8G必要';return render()}S.gold-=8;let d=Math.max(2,Math.floor(h.atk*1.85)+rnd(0,7));b.hp=Math.max(0,b.hp-d);info=`${h.n}の奥義！ ${d}ダメージ`;delay=34}
  else if(action==='guard'){unit.guard=true;info=`${h.n}は防御の構えを取った`;delay=14}
- else if(action==='heal'){if(S.gold<12){notice='回復には12G必要';return render()}S.gold-=12;let target=ctbRoster().sort((a,z)=>a.hp/a.mhp-z.hp/z.mhp)[0];let amount=Math.min(target.mhp-target.hp,12+Math.floor(h.lv/2));target.hp+=amount;info=`${h.n}が${target.n}を${amount}回復`;delay=28}
+ else if(action==='heal'){let target=ctbRoster().sort((a,z)=>a.hp/a.mhp-z.hp/z.mhp)[0];if(!target||target.hp>=target.mhp){notice='回復が必要な仲間がいません';return render()}if(S.gold<12){notice='回復には12G必要';return render()}S.gold-=12;let amount=Math.min(target.mhp-target.hp,12+Math.floor(h.lv/2));target.hp+=amount;info=`${h.n}が${target.n}を${amount}回復`;delay=28}
  else return;
  unit.t+=delay+Math.max(4,Math.floor(120/ctbSpeed(h)));
  b.ctb.turns++;b.info=info;notice=info;
@@ -251,15 +251,25 @@ function ctbStep(action,id){
 }
 function ctbEnemy(b){
  const targets=b.ctb.units.map(u=>ctbRoster().find(h=>h.id===u.id)).filter(Boolean);
- if(!targets.length){defeat();return}
+ if(!targets.length){
+   const reserve=ctbRoster().find(h=>!b.ctb.units.some(u=>u.id===h.id));
+   if(!reserve){defeat();return}
+   b.ctb.units.push({id:reserve.id,t:b.ctb.enemy.t+12,guard:false});
+   b.info=reserve.n+'が前衛に駆けつけた';notice=b.info;return;
+ }
  const target=pick(targets),u=b.ctb.units.find(u=>u.id===target.id);
- let d=Math.max(1,b.atk+rnd(0,4)-Math.floor(Number(target.defense||0)/2));if(u.guard)d=Math.max(1,Math.ceil(d*.45));
+ let d=Math.max(1,b.atk+rnd(0,4)-Math.floor(Number(target.defense||0)/2));
+ if(u.guard)d=Math.max(1,Math.ceil(d*.45));
  target.hp=Math.max(0,target.hp-d);u.guard=false;
  b.ctb.enemy.t+=24;b.ctb.turns++;
  b.ctb.units=b.ctb.units.filter(u=>ctbRoster().some(h=>h.id===u.id));
- b.info=`${b.name}の攻撃！ ${target.n}に${d}ダメージ`;
- notice=b.info;
- if(!ctbRoster().length)defeat();
+ b.info=`${b.name}の攻撃！ ${target.n}に${d}ダメージ`;notice=b.info;
+ if(!ctbRoster().length){defeat();return}
+ if(!b.ctb.units.length){
+  const reserve=ctbRoster()[0];
+  b.ctb.units.push({id:reserve.id,t:b.ctb.enemy.t+12,guard:false});
+  b.info+='。'+reserve.n+'が交代で出陣';notice=b.info;
+ }
 }
 function ctbRunEnemy(b){for(let i=0;i<5&&S.battle===b&&ctbNext(b)?.kind==='enemy';i++)ctbEnemy(b)}
 function ctbSwap(){
